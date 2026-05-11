@@ -1,0 +1,23 @@
+body {
+    font-family: Arial;
+    padding: 40px;
+    background: #111;
+    color: white;
+}
+
+input {
+    width: 60%;
+    padding: 12px;
+}
+
+button {
+    padding: 12px;
+    cursor: pointer;
+}
+
+.card {
+    background: #222;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
