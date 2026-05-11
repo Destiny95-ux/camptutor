@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CAMPUS TUTOR</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+    .result { margin-bottom: 28px; }
+    .result a { font-size: 18px; color: #1a0dab; text-decoration: none; }
+    .result a:hover { text-decoration: underline; }
+    .result .display-url { color: #006621; font-size: 13px; margin: 2px 0; }
+    .result .snippet { color: #545454; font-size: 14px; }
+    input { width: 80%; padding: 10px; font-size: 16px; }
+    button { padding: 10px 16px; font-size: 16px; cursor: pointer; }
+    .dark { background:#1a1a1a; color:#e8e8e8; }
+    .dark .result a { color:#8ab4f8; }
+    .dark .result .display-url { color:#81c995; }
+    .dark .result .snippet { color:#bdc1c6; }
+    
+  </style>
+</head>
+<body>
+  <h2>Campus Ai Assistant</h2>
+  <input id="q" placeholder="Search..." onkeydown="if(event.key==='Enter') doSearch()">
+  <button onclick="doSearch()">Go</button>
+  <button onclick="document.body.classList.toggle('dark')">🌙</button>
+  <div id="results" style="margin-top: 24px;"></div>
+
+  <script>
+    async function doSearch() {
+      const q = document.getElementById('q').value;
+      document.getElementById('results').innerHTML = 'Searching...';
+      const res = await fetch(`/search?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('results').innerHTML = `<p>Error: ${data.error}</p>`;
+        return;
+      }
+
+      if (!data.results.length) {
+        document.getElementById('results').innerHTML = '<p>No results found.</p>';
+        return;
+      }
+
+      document.getElementById('results').innerHTML = data.results.map(r => `
+        <div class="result">
+          <a href="${r.url}" target="_blank" rel="noopener noreferrer">${r.title}</a>
+          <div class="display-url">${r.display_url || r.url || ''}</div>
+          <div class="snippet">${r.snippet}</div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
